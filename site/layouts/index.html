@@ -2,4 +2,39 @@
 
 <h1>Hugo with Gulp, PostCSS and Webpack</h1>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  $.ajax({
+    type: 'POST',
+    url: 'https://www.flex.io/api/v1/pipes/flexio-mysql-items-sample/run?stream=0',
+    data: $('form').serialize(),
+    dataType: 'json',
+    success: function(content) {
+      var row_idx = 0
+      var thead = ''
+      var tbody = ''
+
+      // create a very basic table building up the markup from the JSON
+      $.each(content, function(idx, row) {
+        if (row_idx == 0)
+        {
+          thead += '<tr>'
+          $.each(row, function(key, val) { thead += '<th style="border: 1px solid #ddd; white-space: nowrap">'+key+'</th>' })
+          thead += '</tr>'
+        }
+
+        tbody += '<tr>'
+        $.each(row, function(key, val) { tbody += '<td style="border: 1px solid #ddd; white-space: nowrap">'+val+'</td>' })
+        tbody += '</tr>'
+
+        row_idx++
+      })
+
+      // append the table to the homepage's content area
+      var table = '<div style="border: 1px solid #ddd; overflow: scroll"><table><thead>'+thead+'</thead><tbody>'+tbody+'</tbody></table></div>'
+      $('body').append(table)
+    }
+  })
+</script>
+
 {{ partial "footer" . }}
